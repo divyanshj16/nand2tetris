@@ -8,7 +8,7 @@
 
 // Put your code here.
 
-@mult
+@R2
 M = 0
 
 @i
@@ -24,15 +24,10 @@ D;JGT      //jUMP if greater than 0
 
 @R0
 D = M
-@mult
+@R2
 M = M + D
 @i
 M = M + 1
-
-@mult
-D = M
-@R2
-M = D
 
 @LOOP
 0;JMP
