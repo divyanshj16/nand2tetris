@@ -39,5 +39,45 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    // Put your code here:
+    
+    Not(in = instruction[15],out = A);  //A instruction
+    Not(in = A,out = C);  //C instruction
+
+    And(a = C,b = instruction[5],out = c1);  //control 1
+
+    Mux16(a = instruction,b = tempout,sel = c1,out = temp2);
+
+    Or(a = c1, b =  A,out = c2);
+
+   	ARegister(in = temp2,load = c2,out = temp3);         //Register A
+   	Mux16(a = temp3,b = inM,sel = instruction[12],out = temp4);    //inM or RegA
+
+
+   	And(a = C, b=instruction[4], out=loadD);
+   	DRegister(in = tempout,load = loadD,out = temp5);        //Register D
+   	
+   	ALU(x = temp5,y = temp4,zx = instruction[11],nx = instruction[10],zy = instruction[9],ny = instruction[8],f = instruction[7],no = instruction[6],out = tempout,zr = zr,ng = ng);                    //ALU out
+
+   	Or16(a = tempout,b = tempout,out = outM);
+   	
+
+   	
+   	And(a = instruction[15],b = instruction[3],out = writeM);
+   	Or16(a = false,b = temp3,out[0..14] = addressM);
+   	
+
+
+   	//CAL of load and inc
+   	And(a = zr, b = instruction[1], out = jeq);    // is zero and jump if zero
+    And(a = ng, b = instruction[2], out = jlt);    // is neg and jump if neg
+    Or(a = zr, b = ng, out = zeroOrNeg);
+    Not(in = zeroOrNeg, out = positive);            // is positive (not zero and not neg)
+    And(a = positive, b = instruction[0], out = jgt); // is pos and jump if pos
+    Or(a = jeq, b = jlt, out = jle);
+    Or(a = jle, b = jgt, out = jumpToA);              // load PC if cond met and jump if cond
+    And(a = instruction[15], b = jumpToA, out = PCload); // Only jump if C instruction
+    Not(in = PCload, out = PCinc);                  // only inc if not load
+    PC(in = temp4,load = PCload,inc = PCinc,reset = reset,out[0..14] = pc);
+
+
 }
