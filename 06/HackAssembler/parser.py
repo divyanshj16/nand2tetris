@@ -5,8 +5,8 @@ class Parser(object):
 	def __init__(self, instruction):
 		self.instruction = instruction
 		self.comp = ''
-		self.dest = ''
-		self.jmp = ''
+		self.dest = 'null'
+		self.jmp = 'null'
 		self.parse();
 
 	def	type(self):
