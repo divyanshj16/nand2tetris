@@ -19,7 +19,7 @@ class Parser(object):
 		if not (self.type() == 'A'):
 			part1 = self.instruction.split(';');
 			try:
-				self.jmp = part1[1]
+				self.jmp = part1[1].rstrip('\n')
 			except:
 				print("No Jmp statement")
 			finally:
@@ -27,10 +27,10 @@ class Parser(object):
 			part2 = instructionPart.split('=')
 			if len(part2) > 1:
 				print("intruction with destination")
-				self.dest = part2[0]
-				self.comp = part2[1]
+				self.dest = part2[0].rstrip('\n')
+				self.comp = part2[1].rstrip('\n')
 			else:
-				self.comp= part2[0]
+				self.comp= part2[0].rstrip('\n')
 
 def main():
 	instruction = input("Enter a Instruction: ")
