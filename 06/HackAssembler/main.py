@@ -13,11 +13,13 @@ translator = translator.Translator()
 try:
     fin = open(inFile,'r')
     fout = open(outFile,'w')
-    for line in fin:
+    for line in fin:              # PASS: 2
         if cleaner.clean(line):
+            line = cleaner.clean(line)
+            #print(line)
             parsed = parser.Parser(line)
             iType = parsed.type()
-            print (iType + "\n" )
+            print (iType)
 
             if iType == 'A':
                 hackCode = '0' + translator.aInst(line[1:])
@@ -25,7 +27,7 @@ try:
             if iType == 'C':
                 hackCode = '111' + translator.comp(parsed.comp) + translator.dest(parsed.dest) + translator.jmp(parsed.jmp)
 
-            print(hackCode + '\n')
+            print(hackCode)
             fout.write(hackCode + '\n')
         else:
             print("comment or emptyline\n")

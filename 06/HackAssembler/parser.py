@@ -21,12 +21,13 @@ class Parser(object):
 			try:
 				self.jmp = part1[1].rstrip('\n')
 			except:
-				print("No Jmp statement")
+				pass
+				#print("No Jmp statement")
 			finally:
 				instructionPart = part1[0]
 			part2 = instructionPart.split('=')
 			if len(part2) > 1:
-				print("intruction with destination")
+				#print("intruction with destination")
 				self.dest = part2[0].rstrip('\n')
 				self.comp = part2[1].rstrip('\n')
 			else:
