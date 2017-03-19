@@ -17,8 +17,8 @@ class Parser(object):
 
 	def parse(self):
 		if not (self.type() == 'A'):
-			part1 = self.instruction.split(';');         #jump is seperated by ; in a instruction
- 			try:
+			part1 = self.instruction.split(';')         #jump is seperated by ; in a instruction
+			try:
 				self.jmp = part1[1].rstrip('\n')        #strips \n at the end of statement
 			except:
 				pass
@@ -28,7 +28,7 @@ class Parser(object):
 			part2 = instructionPart.split('=')          #splitting the destination and computation part
 			if len(part2) > 1:
 				#print("intruction with destination")
-				self.dest = part2[0].rstrip('\n')       #storing in object parameters all the values 
+				self.dest = part2[0].rstrip('\n')       #storing in object parameters all the values
 				self.comp = part2[1].rstrip('\n')
 			else:
 				self.comp= part2[0].rstrip('\n')

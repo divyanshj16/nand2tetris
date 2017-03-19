@@ -3,6 +3,7 @@ import translator
 import cleaner
 import sys
 import os
+import re
 
 inFile = sys.argv[1]                               #take input from command line
 outFile = inFile.split('.')[0] + '.hack'            #outFile is a hack file with same name as input file
@@ -12,7 +13,15 @@ translator = translator.Translator()                #translator object creation
 
 try:
     fin = open(inFile,'r')
-    fout = open(outFile,'w')                       #write mode outfile
+    fout = open(outFile,'w')                        #write mode outfile
+    lineCtr = 0
+    for line in fin:      #PASS : 1
+        if (cleaner.clean(line) == None or  cleaner.clean(line)):
+            if cleaner.clean(line) == None:
+                cleaner.addLabel(line[1:(len(line)-2)],lineCtr + 1)
+                lineCtr -= 1
+            lineCtr += 1
+
     for line in fin:              # PASS: 2
         if cleaner.clean(line):                     #cleaner returns empty string if find a full line comment or a empty line
             line = cleaner.clean(line)
