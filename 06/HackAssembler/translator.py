@@ -1,5 +1,5 @@
 class Translator(object):
-    compDict = {
+    compDict = {                       #dictionary for computation from n2t book
     "0" : "0101010",
     "1" : "0111111",
     "-1" : "0111010",
@@ -30,7 +30,7 @@ class Translator(object):
     "D|M" : "1010101"
     }
 
-    jmpDict = {
+    jmpDict = {             #dictionary for jump commands
     "null" : "000",
     "JGT" : "001",
     "JEQ" : "010",
@@ -41,7 +41,7 @@ class Translator(object):
     "JMP" : "111"
     }
 
-    destDict = {
+    destDict = {            #dictionary for destination commands
     "null" : "000",
     "M" : "001",
     "D" : "010",
@@ -64,8 +64,8 @@ class Translator(object):
         return Translator.jmpDict[jmp]
 
     def aInst(self, address):
-        binaryAddress = bin(int(address))[2:]
-        mult = 15 - len(binaryAddress);
+        binaryAddress = bin(int(address))[2:]       #converting address to binary
+        mult = 15 - len(binaryAddress);             #converting to 15 bit binary as required by the hardware
         actualAddress = "0" * mult + binaryAddress
         return actualAddress
 
