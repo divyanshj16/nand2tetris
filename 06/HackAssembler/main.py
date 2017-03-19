@@ -14,7 +14,7 @@ translator = translator.Translator()                #translator object creation
 try:
     fin = open(inFile,'r')
     fout = open(outFile,'w')                        #write mode outfile
-    lineCtr = 0
+    lineCtr = -1
     for line in fin:      #PASS : 1
         if (cleaner.clean(line) == None or  cleaner.clean(line)):
             if cleaner.clean(line) == None:
@@ -22,6 +22,7 @@ try:
                 lineCtr -= 1
             lineCtr += 1
 
+    fin.seek(0)
     for line in fin:              # PASS: 2
         if cleaner.clean(line):                     #cleaner returns empty string if find a full line comment or a empty line
             line = cleaner.clean(line)
@@ -31,7 +32,12 @@ try:
             print (iType)
 
             if iType == 'A':
-                hackCode = '0' + translator.aInst(line[1:])   #opcode for a instruction is 0 followed by the 15 bit address passed to translator
+                try:
+                    int(line[1:])
+                    hackCode = '0' + translator.aInst(line[1:])   #opcode for a instruction is 0 followed by the 15 bit address passed to translator
+                except ValueError:
+                    value = cleaner.getVariableAddress(line[1:])
+                    hackCode = '0' + translator.aInst(value)
 
             if iType == 'C':
                 hackCode = '111' + translator.comp(parsed.comp) + translator.dest(parsed.dest) + translator.jmp(parsed.jmp) #gathers destination computaion and jump parts in binary format and concatenates to 111 which op-code of c instruction

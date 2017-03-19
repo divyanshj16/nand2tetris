@@ -3,6 +3,8 @@ import re
 class Cleaner(object):
     """Cleans the instruction from whitespaces and comments"""
 
+    addressCounter = 15
+
     labels = {                  #dictionary fro predefined labels
     'R0' : '0',
     'R1' : '1',
@@ -39,6 +41,17 @@ class Cleaner(object):
     def addLabel(self,label,ctr):
         Cleaner.labels[label] = ctr
         print(Cleaner.labels[label])
+
+    def getVariableAddress(self,string):
+        try:
+            value = Cleaner.labels[string]
+            return value
+        except KeyError:
+            Cleaner.addressCounter += 1             #variables can be allocated from adddress 16
+            Cleaner.labels[string] = Cleaner.addressCounter
+            print(Cleaner.addressCounter)
+            return Cleaner.addressCounter
+
 
 def main():
     cleaner = Cleaner()
