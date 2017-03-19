@@ -34,5 +34,4 @@ try:
     fout.close()
 
 except FileNotFoundError:
-    print("Enter Valid file name")
-    os.system("python main.py")
+    print("pass Valid file name as argument")
