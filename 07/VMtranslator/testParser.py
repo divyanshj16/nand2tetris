@@ -10,16 +10,25 @@ class testParser(unittest.TestCase):
     def test_cleaner_comments(self):
         cleaned = self.parser.cleaner('//This is a comment')
         self.assertEqual(cleaned,"","The line is a Comment")
+        self.assertEqual(self.parser.command,'')
 
     def test_cleaner_whitespaces(self):
         cleaned = self.parser.cleaner('  add   ',)
         self.assertEqual(cleaned,"add","command stripped")
+        self.assertEqual(self.parser.command,'add')
 
     def test_cleaner_inlineComments(self):
         self.assertEqual(self.parser.cleaner('add   //this adds 2 stack'),'add',"comment removed")
+        self.assertEqual(self.parser.command,'add')
 
     def test_cleaner_emptyline(self):
         self.assertEqual(self.parser.cleaner('               \n'),'','empty line')
+        self.assertEqual(self.parser.command,'')
+
+    def test_cleaner_dataMember(self):
+        self.parser.cleaner("   push         local    17       //this is a test")
+        self.assertEqual(self.parser.command,'push         local    17')
+
 
     def test_command_type_arithmetic(self):
         types_of_commands = ['add','sub','neg','eq','gt','lt','and','or','not']
@@ -51,9 +60,6 @@ class testParser(unittest.TestCase):
         self.parser.split_command("add")
         self.assertEqual(self.parser.arg1,'add',"non arithmetic command itself is stored in arg1")
         self.assertEqual(self.parser.arg2,'',"empty string is arg2")
-
-
-
 
 
 if __name__ == '__main__':
