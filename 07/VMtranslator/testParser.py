@@ -40,6 +40,19 @@ class testParser(unittest.TestCase):
     def test_command_type_pop(self):
         self.assertEqual(self.parser.command_type('pop segment index'),2,"pop type command")
 
+    def test_split_non_arithmetic(self):
+        self.parser.command_type('push constant 14')
+        self.parser.split_command("push constant 14")
+        self.assertEqual(self.parser.arg1,'constant',"argument 1 is constant arg1")
+        self.assertEqual(self.parser.arg2,'14',"argument 2  is 14 arg2")
+
+    def test_split_arithmetic(self):
+        self.parser.command_type('add')
+        self.parser.split_command("add")
+        self.assertEqual(self.parser.arg1,'add',"non arithmetic command itself is stored in arg1")
+        self.assertEqual(self.parser.arg2,'',"empty string is arg2")
+
+
 
 
 
