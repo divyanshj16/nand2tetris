@@ -64,3 +64,6 @@ class testParser(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    # FOR VERBOSE TESTS
+    # suite = unittest.TestLoader().loadTestsFromTestCase(testParser)
+    # unittest.TextTestRunner(verbosity=3).run(suite)
