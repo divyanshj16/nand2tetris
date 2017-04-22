@@ -1,3 +1,5 @@
+from constants import types_of_arithmetic_commands, types_of_segments,type_of_commands
+
 class CodeWriter(object):
     '''Converts VM commands to hack assembly commands'''
 
@@ -11,6 +13,8 @@ class CodeWriter(object):
     in_pop1 = '\n@SP\nA = M\nA = A - 1\n'
     pop1 = '\n@SP\nA = M\n'
     u_jmp = '\n0;JMP'
+
+
 
 
 
@@ -34,7 +38,7 @@ class CodeWriter(object):
             return self.current_command_translation
 
         if command == 'neg':
-            self.current_command_translation = '//' + self.current_command + CodeWriter.in_pop1 + 'M = -M' + CodeWriter.inc_SP
+            self.current_command_translation = '//' + self.current_command + CodeWriter.in_pop1 + 'M = -M\n'
             return self.current_command_translation
 
         if command == 'eq':
@@ -63,4 +67,26 @@ class CodeWriter(object):
             CodeWriter.default + str(self.default_ctr) + ')' + CodeWriter.inc_SP
             self.lt_ctr += 1
             self.default_ctr += 1
+            return self.current_command_translation
+
+        if command == 'and':
+            self.current_command_translation = '//' + self.current_command + CodeWriter.pop2 + 'D = M & D\n@SP\nAM = M + 1\nA = A - 1\nM = D\n'
+            return self.current_command_translation
+
+        if command == 'or':
+            self.current_command_translation = '//' + self.current_command + CodeWriter.pop2 + 'D = M | D\n@SP\nAM = M + 1\nA = A - 1\nM = D\n'
+            return self.current_command_translation
+
+        if command == 'not':
+            self.current_command_translation = '//' + self.current_command + CodeWriter.in_pop1 + 'M = !M\n'
+            return self.current_command_translation
+
+    def write_push_pop(self, c_type, segment, index):
+        comment = '//' + type_of_commands[c_type] + ' ' + types_of_segments[segment] + ' ' + str(index) + '\n'
+        if segment == 0:
+            if c_type == 1:
+                self.current_command_translation = comment + '@' + str(index) + '\nD = A\n@ARG\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n'
+                return self.current_command_translation
+        if segment == 3:
+            self.current_command_translation = comment + '@' + str(index) + '\nD = A\n@SP\nA = M\nM = D' + CodeWriter.inc_SP
             return self.current_command_translation
