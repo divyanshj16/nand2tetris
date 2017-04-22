@@ -61,6 +61,27 @@ class testParser(unittest.TestCase):
         self.assertEqual(self.parser.arg1,'add',"non arithmetic command itself is stored in arg1")
         self.assertEqual(self.parser.arg2,'',"empty string is arg2")
 
+    def test_command_id_constant(self):
+        self.parser.command_type('push constant 14')
+        self.parser.split_command("push constant 14")
+        self.assertEqual(self.parser.command_id,3)
+
+    def test_command_id_local(self):
+        self.parser.command_type('pop local 14')
+        self.parser.split_command("pop local 14")
+        self.assertEqual(self.parser.command_id,1)
+
+    def test_command_id_static(self):
+        self.parser.command_type('pop static 14')
+        self.parser.split_command("pop static 14")
+        self.assertEqual(self.parser.command_id,2)
+
+    def test_command_id_pointer(self):
+        self.parser.command_type('pop pointer 14')
+        self.parser.split_command("pop pointer 14")
+        self.assertEqual(self.parser.command_id,6)
+
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,10 +1,15 @@
+from constants import types_of_arithmetic_commands, types_of_segments
+
+
 class Parser(object):
-    types_of_arithmetic_commands = ['add','sub','neg','eq','gt','lt','and','or','not']
+
+
 
     def __init__(self):
         self.arg1 = ''
         self.arg2 = ''
         self.command = ''
+        self.command_id = -1
         self.type = 100
 
     def cleaner(self,command):
@@ -20,15 +25,15 @@ class Parser(object):
 
     def command_type(self,command):
         com_type = command.split()[0]
-        if com_type in Parser.types_of_arithmetic_commands:
+        if com_type in types_of_arithmetic_commands:
             self.type = 0
-            return 0                                # For arithmetic commands i.e c_arithmetic
+            return 0                                # 0 is For arithmetic commands i.e c_arithmetic
         if com_type == 'push':
             self.type = 1
-            return 1                                # For c_push or push commands
+            return 1                                # 1 is For c_push or push commands
         if com_type == 'pop':
             self.type = 2
-            return 2                                # For c_pop commands
+            return 2                                # 2 is For c_pop commands
 
         #for c_return split method is not called
 
@@ -40,3 +45,7 @@ class Parser(object):
         if self.type == 1 or self.type == 2:
             self.arg1 = parts[1]
             self.arg2 = parts[2]
+            self.command_id = Parser.set_command_id(self.arg1)
+
+    def set_command_id(segment):
+        return types_of_segments.index(segment)
