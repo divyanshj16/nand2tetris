@@ -58,11 +58,11 @@ class TestCodeWriter(unittest.TestCase):
         converted_string = self.cdw.write_push_pop(1,3,17)
         self.assertEqual(converted_string,'//push constant 17\n@17\nD = A\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n')
 
-    def test_write_push_pop_argument(self):
-        converted_string = self.cdw.write_push_pop(1,0,3)
-        self.assertEqual(converted_string,'//push argument 3\n@3\nD = A\n@ARG\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n')
-
-
+    # def test_write_push_pop_argument(self):
+    #     converted_string = self.cdw.write_push_pop(1,0,3)
+    #     self.assertEqual(converted_string,'//push argument 3\n@3\nD = A\n@ARG\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n')
+    #
+    #
 
 
 
