@@ -7,26 +7,26 @@ class testParser(unittest.TestCase):
     def setUp(self):
         self.parser = Parser()
 
-    def test_cleaner_comments(self):
-        cleaned = self.parser.cleaner('//This is a comment')
+    def test_clean_comments(self):
+        cleaned = self.parser.clean('//This is a comment')
         self.assertEqual(cleaned,"","The line is a Comment")
         self.assertEqual(self.parser.command,'')
 
-    def test_cleaner_whitespaces(self):
-        cleaned = self.parser.cleaner('  add   ',)
+    def test_clean_whitespaces(self):
+        cleaned = self.parser.clean('  add   ',)
         self.assertEqual(cleaned,"add","command stripped")
         self.assertEqual(self.parser.command,'add')
 
-    def test_cleaner_inlineComments(self):
-        self.assertEqual(self.parser.cleaner('add   //this adds 2 stack'),'add',"comment removed")
+    def test_clean_inlineComments(self):
+        self.assertEqual(self.parser.clean('add   //this adds 2 stack'),'add',"comment removed")
         self.assertEqual(self.parser.command,'add')
 
-    def test_cleaner_emptyline(self):
-        self.assertEqual(self.parser.cleaner('               \n'),'','empty line')
+    def test_clean_emptyline(self):
+        self.assertEqual(self.parser.clean('               \n'),'','empty line')
         self.assertEqual(self.parser.command,'')
 
-    def test_cleaner_dataMember(self):
-        self.parser.cleaner("   push         local    17       //this is a test")
+    def test_clean_dataMember(self):
+        self.parser.clean("   push         local    17       //this is a test")
         self.assertEqual(self.parser.command,'push         local    17')
 
 

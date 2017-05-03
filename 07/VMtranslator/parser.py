@@ -12,12 +12,12 @@ class Parser(object):
         self.command_id = -1
         self.type = 100
 
-    def cleaner(self,command):
+    def clean(self,command):
         stripped_command =  command.strip()
         if len(stripped_command) < 1:
             return ""                           #for empty line
         elif stripped_command.startswith("//"):
-            return ""                           #for empty line
+            return ""                           #for comment
         else:
             self.command = stripped_command.split('//')[0].strip()
             return self.command                   #for inline comments and normal commands
