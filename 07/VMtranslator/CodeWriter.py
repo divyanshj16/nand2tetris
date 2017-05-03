@@ -3,6 +3,11 @@ from constants import types_of_arithmetic_commands, types_of_segments,type_of_co
 class CodeWriter(object):
     '''Converts VM commands to hack assembly commands'''
 
+    default_ctr = 1
+    lt_ctr = 1
+    gt_ctr = 1
+    eq_ctr = 1
+
     eq = 'EQ_'
     default = 'DEFAULT_'
     gt = 'GT_'
@@ -24,10 +29,10 @@ class CodeWriter(object):
     def __init__(self):
         self.current_command = ''
         self.current_command_translation = ''
-        self.eq_ctr = 1
-        self.gt_ctr = 1
-        self.default_ctr = 1
-        self.lt_ctr = 1
+        #self.eq_ctr = 1
+        # self.gt_ctr = 1
+        # self.default_ctr = 1
+        # self.lt_ctr = 1
 
     def write_arithmetic(self,command):
         self.current_command = command
@@ -45,31 +50,31 @@ class CodeWriter(object):
             return self.current_command_translation
 
         if command == 'eq':
-            self.current_command_translation = '//' + self.current_command + CodeWriter.pop2 + '@' + CodeWriter.eq + \
-            str(self.eq_ctr) + '\nD = M - D;JEQ' + CodeWriter.pop1 + 'M = 0\n@' + CodeWriter.default + \
-            str(self.default_ctr) + CodeWriter.u_jmp + '\n(' + CodeWriter.eq + str(self.eq_ctr) + ')\nM = -1\n(' + \
-            CodeWriter.default + str(self.default_ctr) + ')' + CodeWriter.inc_SP
-            self.eq_ctr += 1
-            self.default_ctr += 1
+            self.current_command_translation = '//' + self.current_command + CodeWriter.pop2 + 'D = M - D\n' + '@' + CodeWriter.eq + \
+            str(CodeWriter.eq_ctr) + '\nD;JEQ' + CodeWriter.pop1 + 'M = 0\n@' + CodeWriter.default + \
+            str(CodeWriter.default_ctr) + CodeWriter.u_jmp + '\n(' + CodeWriter.eq + str(CodeWriter.eq_ctr) + ')\n@SP\nA = M\nM = -1\n(' + \
+            CodeWriter.default + str(CodeWriter.default_ctr) + ')' + CodeWriter.inc_SP
+            CodeWriter.eq_ctr += 1
+            CodeWriter.default_ctr += 1
             return self.current_command_translation
 
         if command == 'gt':
-            self.current_command_translation = '//' + self.current_command + CodeWriter.pop2 + '@' + CodeWriter.gt + \
-            str(self.gt_ctr) + '\nD = M - D;JGT' + CodeWriter.pop1 + 'M = 0\n@' + CodeWriter.default + \
-            str(self.default_ctr) + CodeWriter.u_jmp + '\n(' + CodeWriter.gt + str(self.gt_ctr) + ')\nM = -1\n(' + \
-            CodeWriter.default + str(self.default_ctr) + ')' + CodeWriter.inc_SP
-            self.gt_ctr += 1
-            self.default_ctr += 1
+            self.current_command_translation = '//' + self.current_command + CodeWriter.pop2 + 'D = M - D\n' + '@' + CodeWriter.gt + \
+            str(CodeWriter.gt_ctr) + '\nD;JGT' + CodeWriter.pop1 + 'M = 0\n@' + CodeWriter.default + \
+            str(CodeWriter.default_ctr) + CodeWriter.u_jmp + '\n(' + CodeWriter.gt + str(CodeWriter.gt_ctr) + ')\n@SP\nA = M\nM = -1\n(' + \
+            CodeWriter.default + str(CodeWriter.default_ctr) + ')' + CodeWriter.inc_SP
+            CodeWriter.gt_ctr += 1
+            CodeWriter.default_ctr += 1
             return self.current_command_translation
 
 
         if command == 'lt':
-            self.current_command_translation = '//' + self.current_command + CodeWriter.pop2 + '@' + CodeWriter.lt + \
-            str(self.lt_ctr) + '\nD = M - D;JLT' + CodeWriter.pop1 + 'M = 0\n@' + CodeWriter.default + \
-            str(self.default_ctr) + CodeWriter.u_jmp + '\n(' + CodeWriter.lt + str(self.lt_ctr) + ')\nM = -1\n(' + \
-            CodeWriter.default + str(self.default_ctr) + ')' + CodeWriter.inc_SP
-            self.lt_ctr += 1
-            self.default_ctr += 1
+            self.current_command_translation = '//' + self.current_command + CodeWriter.pop2 + 'D = M - D\n' + '@' + CodeWriter.lt + \
+            str(CodeWriter.lt_ctr) + '\nD;JLT' + CodeWriter.pop1 + 'M = 0\n@' + CodeWriter.default + \
+            str(CodeWriter.default_ctr) + CodeWriter.u_jmp + '\n(' + CodeWriter.lt + str(CodeWriter.lt_ctr) + ')\n@SP\nA = M\nM = -1\n(' + \
+            CodeWriter.default + str(CodeWriter.default_ctr) + ')' + CodeWriter.inc_SP
+            CodeWriter.lt_ctr += 1
+            CodeWriter.default_ctr += 1
             return self.current_command_translation
 
         if command == 'and':
@@ -104,11 +109,11 @@ class CodeWriter(object):
 
             if segment == 7:  #temp
                 self.current_command_translation = comment + '@' + str(CodeWriter.temp_ + index) + \
-                '\nD = M\n@SP\nA = M\nM = D\nM = M + 1\n'\
+                '\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n'\
 
             if segment == 6: #pointer
                 self.current_command_translation = comment + '@' + pointer_name[index] + \
-                 '\nD = A\n@SP\nA = M\nM = D\nM = M + 1\n'
+                 '\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n'
 
 
         if c_type == 2:  #pop
