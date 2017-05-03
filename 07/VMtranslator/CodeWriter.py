@@ -1,4 +1,4 @@
-from constants import types_of_arithmetic_commands, types_of_segments,type_of_commands
+from constants import types_of_arithmetic_commands, types_of_segments,type_of_commands,seg_name
 
 class CodeWriter(object):
     '''Converts VM commands to hack assembly commands'''
@@ -7,12 +7,14 @@ class CodeWriter(object):
     default = 'DEFAULT_'
     gt = 'GT_'
     lt = 'LT_'
+    static_ = 'static'
 
     inc_SP = '\n@SP\nM = M + 1\n'
     pop2 = '\n@SP\nAM = M - 1\nD = M\n@SP\nAM = M - 1\n'
     in_pop1 = '\n@SP\nA = M\nA = A - 1\n'
     pop1 = '\n@SP\nA = M\n'
     u_jmp = '\n0;JMP'
+    dec_SP = '@SP\nM = M - 1\n'
 
 
 
@@ -82,6 +84,39 @@ class CodeWriter(object):
             return self.current_command_translation
 
     def write_push_pop(self, c_type, segment, index):
+        comment = '//' + type_of_commands[c_type] + ' ' + types_of_segments[segment] + ' ' + str(index) + '\n'
+
+        if segment == 3:      #constant
+             self.current_command_translation = comment + '@' + str(index) + '\nD = A\n@SP\nA = M\nM = D' + CodeWriter.inc_SP
+             return self.current_command_translation
+
+        if c_type == 1:   #push
+
+            if segment in [0,1,4,5]:   #ARG,LCL,THIS,THAT
+                self.current_command_translation = comment + '@' + str(index) + '\nD = A\n@' + seg_name[segment] + \
+                 '\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n'
+
+            if segment == 2:  #static
+                self.current_command_translation = comment + '@' + CodeWriter.static_ + '.' + str(index) + \
+                 '\nD = M\n@SP\nA = M\nM = D' + CodeWriter.inc_SP
+
+
+        if c_type == 2:  #pop
+
+            if segment in [0,1,4,5]:   #ARG,LCL,THIS,THAT
+                self.current_command_translation = comment + CodeWriter.dec_SP + '@' + str(index) + \
+                 '\nD = A\n@' + seg_name[segment] + '\nA = M\nD = A + D\n@R13\nM = D\n@SP\nA = M\nD = M\n@R13\nA = M\nM = D\n'
+
+            if segment == 2:  #static
+                self.current_command_translation = comment + CodeWriter.dec_SP + 'A = M\nD = M\n@' + \
+                CodeWriter.static_ + '.' + str(index) + '\nM = D\n'
+
+
+
+
+        return self.current_command_translation
+
+
         # comment = '//' + type_of_commands[c_type] + ' ' + types_of_segments[segment] + ' ' + str(index) + '\n'
         # if segment == 0:
         #     if c_type == 1:   #ARG
