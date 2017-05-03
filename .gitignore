@@ -1,6 +1,11 @@
 *.zip
 *.out
 *.pyc
+07/VMtranslator/*.vm
+07/VMtranslator/*.asm
+07/VMtranslator/*.tst
+07/VMtranslator/*.cmp
+
 
 
 # temporary files which can be created if a process still has a handle open of a deleted file
