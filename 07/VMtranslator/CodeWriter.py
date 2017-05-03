@@ -82,11 +82,11 @@ class CodeWriter(object):
             return self.current_command_translation
 
     def write_push_pop(self, c_type, segment, index):
-        comment = '//' + type_of_commands[c_type] + ' ' + types_of_segments[segment] + ' ' + str(index) + '\n'
-        if segment == 0:
-            if c_type == 1:
-                self.current_command_translation = comment + '@' + str(index) + '\nD = A\n@ARG\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n'
-                return self.current_command_translation
-        if segment == 3:
-            self.current_command_translation = comment + '@' + str(index) + '\nD = A\n@SP\nA = M\nM = D' + CodeWriter.inc_SP
-            return self.current_command_translation
+        # comment = '//' + type_of_commands[c_type] + ' ' + types_of_segments[segment] + ' ' + str(index) + '\n'
+        # if segment == 0:
+        #     if c_type == 1:   #ARG
+        #         self.current_command_translation = comment + '@' + str(index) + '\nD = A\n@ARG\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n'
+        #         return self.current_command_translation
+        # if segment == 3:      #constant
+        #     self.current_command_translation = comment + '@' + str(index) + '\nD = A\n@SP\nA = M\nM = D' + CodeWriter.inc_SP
+        #     return self.current_command_translation
