@@ -58,11 +58,44 @@ class TestCodeWriter(unittest.TestCase):
         converted_string = self.cdw.write_push_pop(1,3,17)
         self.assertEqual(converted_string,'//push constant 17\n@17\nD = A\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n')
 
-    # def test_write_push_pop_argument(self):
-    #     converted_string = self.cdw.write_push_pop(1,0,3)
-    #     self.assertEqual(converted_string,'//push argument 3\n@3\nD = A\n@ARG\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n')
-    #
-    #
+    def test_write_push_pop_argument(self):
+        converted_string = self.cdw.write_push_pop(1,0,3)
+        self.assertEqual(converted_string,'//push argument 3\n@3\nD = A\n@ARG\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n')
+        converted_string = self.cdw.write_push_pop(2,0,7)
+        self.assertEqual(converted_string,'//pop argument 7\n@SP\nM = M - 1\n@7\nD = A\n@ARG\nA = M\nD = A + D\n@R13\nM = D\n@SP\nA = M\nD = M\n@R13\nA = M\nM = D\n')
+
+    def test_write_push_pop_local(self):
+        converted_string = self.cdw.write_push_pop(1,1,5)
+        self.assertEqual(converted_string,'//push local 5\n@5\nD = A\n@LCL\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n')
+        converted_string = self.cdw.write_push_pop(2,1,10)
+        self.assertEqual(converted_string,'//pop local 10\n@SP\nM = M - 1\n@10\nD = A\n@LCL\nA = M\nD = A + D\n@R13\nM = D\n@SP\nA = M\nD = M\n@R13\nA = M\nM = D\n')
+
+
+    def test_write_push_pop_this(self):
+        converted_string = self.cdw.write_push_pop(1,4,12)
+        self.assertEqual(converted_string,'//push this 12\n@12\nD = A\n@THIS\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n')
+        converted_string = self.cdw.write_push_pop(2,4,2)
+        self.assertEqual(converted_string,'//pop this 2\n@SP\nM = M - 1\n@2\nD = A\n@THIS\nA = M\nD = A + D\n@R13\nM = D\n@SP\nA = M\nD = M\n@R13\nA = M\nM = D\n')
+
+
+    def test_write_push_pop_that(self):
+        converted_string = self.cdw.write_push_pop(1,5,1)
+        self.assertEqual(converted_string,'//push that 1\n@1\nD = A\n@THAT\nA = M\nA = A + D\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n')
+        converted_string = self.cdw.write_push_pop(2,5,6)
+        self.assertEqual(converted_string,'//pop that 6\n@SP\nM = M - 1\n@6\nD = A\n@THAT\nA = M\nD = A + D\n@R13\nM = D\n@SP\nA = M\nD = M\n@R13\nA = M\nM = D\n')
+
+    def test_write_push_pop_static(self):
+        converted_string = self.cdw.write_push_pop(1,2,4)
+        self.assertEqual(converted_string,'//push static 4\n@static.4\nD = M\n@SP\nA = M\nM = D\n@SP\nM = M + 1\n')
+        converted_string = self.cdw.write_push_pop(2,2,8)
+        self.assertEqual(converted_string,'//pop static 8\n@SP\nM = M - 1\nA = M\nD = M\n@static.8\nM = D\n')
+
+        
+
+
+
+
+
 
 
 
