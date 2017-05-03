@@ -90,7 +90,23 @@ class TestCodeWriter(unittest.TestCase):
         converted_string = self.cdw.write_push_pop(2,2,8)
         self.assertEqual(converted_string,'//pop static 8\n@SP\nM = M - 1\nA = M\nD = M\n@static.8\nM = D\n')
 
-        
+    def test_write_push_pop_temp(self):
+        converted_string = self.cdw.write_push_pop(1,7,4)
+        self.assertEqual(converted_string,'//push temp 4\n@9\nD = M\n@SP\nA = M\nM = D\nM = M + 1\n')
+        converted_string = self.cdw.write_push_pop(2,7,5)
+        self.assertEqual(converted_string,'//pop temp 5\n@SP\nM = M - 1\nA = M\nD = M\n@10\nM = D\n')
+
+    def test_write_push_pop_pointer_push(self):
+        converted_string = self.cdw.write_push_pop(1,6,0)
+        self.assertEqual(converted_string,'//push pointer 0\n@THIS\nD = A\n@SP\nA = M\nM = D\nM = M + 1\n')
+        converted_string = self.cdw.write_push_pop(1,6,1)
+        self.assertEqual(converted_string,'//push pointer 1\n@THAT\nD = A\n@SP\nA = M\nM = D\nM = M + 1\n')
+
+    def test_write_push_pop_pointer_pop(self):
+          converted_string = self.cdw.write_push_pop(2,6,0)
+          self.assertEqual(converted_string,'//pop pointer 0\n@SP\nM = M - 1\nA = M\nD = M\n@THIS\nM = D\n')
+          converted_string = self.cdw.write_push_pop(2,6,1)
+          self.assertEqual(converted_string,'//pop pointer 1\n@SP\nM = M - 1\nA = M\nD = M\n@THAT\nM = D\n')
 
 
 
