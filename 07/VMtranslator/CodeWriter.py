@@ -1,4 +1,4 @@
-from constants import types_of_arithmetic_commands, types_of_segments,type_of_commands,seg_name
+from constants import types_of_arithmetic_commands, types_of_segments,type_of_commands,seg_name,pointer_name
 
 class CodeWriter(object):
     '''Converts VM commands to hack assembly commands'''
@@ -8,6 +8,7 @@ class CodeWriter(object):
     gt = 'GT_'
     lt = 'LT_'
     static_ = 'static'
+    temp_ = 5
 
     inc_SP = '\n@SP\nM = M + 1\n'
     pop2 = '\n@SP\nAM = M - 1\nD = M\n@SP\nAM = M - 1\n'
@@ -100,6 +101,14 @@ class CodeWriter(object):
                 self.current_command_translation = comment + '@' + CodeWriter.static_ + '.' + str(index) + \
                  '\nD = M\n@SP\nA = M\nM = D' + CodeWriter.inc_SP
 
+            if segment == 7:  #temp
+                self.current_command_translation = comment + '@' + str(CodeWriter.temp_ + index) + \
+                '\nD = M\n@SP\nA = M\nM = D\nM = M + 1\n'\
+
+            if segment == 6: #pointer
+                self.current_command_translation = comment + '@' + pointer_name[index] + \
+                 '\nD = A\n@SP\nA = M\nM = D\nM = M + 1\n'
+
 
         if c_type == 2:  #pop
 
@@ -111,8 +120,12 @@ class CodeWriter(object):
                 self.current_command_translation = comment + CodeWriter.dec_SP + 'A = M\nD = M\n@' + \
                 CodeWriter.static_ + '.' + str(index) + '\nM = D\n'
 
+            if segment == 7: #temp
+                self.current_command_translation = comment + CodeWriter.dec_SP + 'A = M\nD = M\n@' + \
+                 str(CodeWriter.temp_ + index) + '\nM = D\n'
 
-
+            if segment == 6: #pointer
+                self.current_command_translation = comment + CodeWriter.dec_SP + 'A = M\nD = M\n@' + pointer_name[index] + '\nM = D\n'
 
         return self.current_command_translation
 
