@@ -5,6 +5,7 @@
 07/VMtranslator/*.asm
 07/VMtranslator/*.tst
 07/VMtranslator/*.cmp
+07/VMtranslator/lang.txt
 
 
 
